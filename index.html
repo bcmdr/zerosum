@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ZeroSum</title>
+    <meta name="author" content="Brett Commandeur">
+    <meta name="description" content="Fasting for your Wallet">
+    <meta name="keywords" content="app">
+  </head>
+  <body>
+  <!-- MAIN -->
+
+  <main class="app view">
+    <section class="timer view">
+      <span class="timer">0:00</span>
+    </section>
+  </main>
+
+  <!-- IMPORTS -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+
+  <!-- CUSTOM -->
+  <script type="text/javascript">
+
+  firebase.initializeApp({
+    "apiKey": "AIzaSyA9UcmPAqcTI6gO5JLuqb5r-totOK_bhR0",
+    "authDomain": "zerosumgame-2018.firebaseapp.com",
+    "databaseURL": "https://zerosumgame-2018.firebaseio.com",
+    "projectId": "zerosumgame-2018",
+    "storageBucket": "",
+    "messagingSenderId": "724523232306"
+  })
+
+  class User {
+  	constructor(firebase_db, usernameStr) {
+  		this.db = firebase_db
+  		this.username = usernameStr
+  		this.url = 'users/' + this.username
+  	}
+  	saveTo(locationStr, id, dataObj) {
+  		this.db.ref(this.url + '/' + locationStr + '/' + id).set(dataObj)
+  	}
+  	getFrom(locationStr, id) {
+  		return this.db.ref(this.url + '/' + locationStr + '/' + id).once('value')
+  	}
+
+  }
+
+  let bcmdr = new User(firebase.database(), "bcmdr")
+
+  // Save test starts
+  bcmdr.saveTo("starts", 1, {
+  	now: Date.now()
+  })
+  bcmdr.saveTo("starts", 2, {
+  	now: Date.now()
+  })
+  bcmdr.saveTo("starts", 3, {
+  	now: Date.now()
+  })
+
+  bcmdr.getFrom("starts", 1).then((snapshot)=>{
+  	let now = snapshot.val()
+  	console.log(Date.parse(now));
+  })
+
+  </script>
+  </body>
+</html>
